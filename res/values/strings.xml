@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">ODROID Updater</string>
+    <string name="action_settings">Settings</string>
+    <string name="download">Download</string>
+    <string name="from">from</string>
+    <string name="update">Restart for update</string>
+    <string name="format_userdata">Format userdata</string>
+    <string name="n_a">N/A</string>
+    <string name="validate_file">Validate file</string>
+    <string name="md5sum">MD5SUM : </string>
+    <string name="format_fat">Format FAT</string>
+    <string name="clear_uboot_env">Clear uboot env</string>
+    <string name="update_uboot">Update uboot</string>
+    <string name="get_last_version">Get last Version.</string>
+    <string name="write_kernel">Write zImage(dd)</string>
+
+</resources>

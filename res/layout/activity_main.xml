@@ -1,0 +1,144 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    tools:context=".MainActivity" >
+
+    <EditText
+        android:id="@+id/et_url"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="52dp"
+        android:ems="10" >
+    </EditText>
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/et_url"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="30dp"
+        android:text="@string/from" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/cb_userdata_format"
+        android:layout_below="@+id/btn_Validate"
+        android:layout_marginTop="18dp"
+        android:text="@string/md5sum" />
+
+    <Button
+        android:id="@+id/btn_Update"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/cb_userdata_format"
+        android:layout_below="@+id/cb_userdata_format"
+        android:layout_marginTop="16dp"
+        android:text="@string/update" />
+
+    <CheckBox
+        android:id="@+id/cb_userdata_format"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/btn_Validate"
+        android:layout_below="@+id/textView2"
+        android:layout_marginTop="18dp"
+        android:text="@string/format_userdata" />
+
+    <TextView
+        android:id="@+id/tv_md5sum_result"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/cb_userdata_format"
+        android:layout_toRightOf="@+id/textView2" />
+
+    <Button
+        android:id="@+id/btn_Validate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tv_md5sum"
+        android:layout_below="@+id/tv_md5sum"
+        android:layout_marginTop="24dp"
+        android:text="@string/validate_file" />
+
+    <CheckBox
+        android:id="@+id/cb_fat_format"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/cb_userdata_format"
+        android:layout_alignBottom="@+id/cb_userdata_format"
+        android:layout_toRightOf="@+id/cb_userdata_format"
+        android:text="@string/format_fat" />
+
+    <CheckBox
+        android:id="@+id/cb_clear_uboot_env"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/cb_fat_format"
+        android:layout_alignBottom="@+id/cb_fat_format"
+        android:layout_toRightOf="@+id/cb_fat_format"
+        android:text="@string/clear_uboot_env" />
+
+    <CheckBox
+        android:id="@+id/cb_update_uboot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/cb_clear_uboot_env"
+        android:layout_alignBottom="@+id/cb_clear_uboot_env"
+        android:layout_toRightOf="@+id/cb_clear_uboot_env"
+        android:text="@string/update_uboot" />
+
+    <Button
+        android:id="@+id/btn_get_last_version"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/et_url"
+        android:text="@string/get_last_version" />
+
+    <Button
+        android:id="@+id/btn_Download"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/btn_get_last_version"
+        android:layout_alignBottom="@+id/btn_get_last_version"
+        android:layout_toRightOf="@+id/btn_Update"
+        android:text="@string/download" />
+
+    <TextView
+        android:id="@+id/tv_check_last"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tv_md5sum"
+        android:layout_below="@+id/btn_get_last_version" />
+
+    <TextView
+        android:id="@+id/tv_md5sum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/btn_get_last_version"
+        android:layout_below="@+id/tv_check_last"
+        android:layout_marginTop="16dp"
+        android:text="@string/n_a" />
+
+    <Button
+        android:id="@+id/btn_dd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/btn_Update"
+        android:layout_toRightOf="@id/btn_Update"
+        android:text="@string/write_kernel" />
+
+</RelativeLayout>
