@@ -20,14 +20,19 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.opengl.Visibility;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.os.StatFs;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.util.Log;
 import android.view.View;
@@ -56,6 +61,7 @@ public class MainActivity extends Activity {
     private Button mBtnUpdate;
     private Button mBtnValidate;
     private Button mBtnGetLastVersion;
+    private Button mBtnExtract;
     private Button mBtnWriteKernel;
     private TextView mTv_CheckLast;
     private TextView mTv_MD5SUMResult;
@@ -166,6 +172,22 @@ public class MainActivity extends Activity {
             
         });
             
+        mBtnExtract = (Button) findViewById(R.id.btn_extract);
+        mBtnExtract.setEnabled(false);
+        mBtnExtract.setOnClickListener(new OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                try {
+                    unzip();
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+        });
+            
         mCbUpdateUboot = (CheckBox)findViewById(R.id.cb_update_uboot);
         mCbUpdateUboot.setEnabled(false);
         
@@ -240,6 +262,7 @@ public class MainActivity extends Activity {
         
         mBtnWriteKernel = (Button)findViewById(R.id.btn_dd);
         mBtnWriteKernel.setEnabled(false);
+        mBtnWriteKernel.setVisibility(View.GONE);
         mBtnWriteKernel.setOnClickListener(new OnClickListener() {
             
             @Override
@@ -282,8 +305,6 @@ public class MainActivity extends Activity {
         
         mHandler = new Handler() {
 
-            private boolean mUnziped = false;
-
 			@Override
 			public void handleMessage(Message msg) {
 				// TODO Auto-generated method stub
@@ -318,18 +339,6 @@ public class MainActivity extends Activity {
 		
 		            if (mDownloadResult.equalsIgnoreCase("true")) {
 		                mBtnValidate.setEnabled(true);
-		                try {					
-		                	mProgressDialog = new ProgressDialog(MainActivity.this);
-					        mProgressDialog.setMessage("Please Wait...Extracting zip file ... ");
-					        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-					        mProgressDialog.setCancelable(false);
-					        mProgressDialog.show();
-                            mUnziped = true;
-		                    unzip();
-		                } catch (IOException e) {
-		                    // TODO Auto-generated catch block
-		                    e.printStackTrace();
-		                }
 		            } else {
 		                Toast.makeText(getBaseContext(), "Download fail!\nCheck your site!", Toast.LENGTH_LONG).show();
 		            }
@@ -376,31 +385,18 @@ public class MainActivity extends Activity {
 					mProgressDialog.dismiss();
 					if (mMd5sumResult.equalsIgnoreCase("true")) {
 		                mTv_MD5SUMResult.setText("matching");
-                        mBtnUpdate.setEnabled(true);
 		                mBtnWriteKernel.setEnabled(true);
+		                mBtnExtract.setEnabled(true);
 		            } else {
 		                mTv_MD5SUMResult.setText("not matching");
 		            }
-                    if (!mUnziped) {
-		                try {
-                            if (mProgressDialog == null)
-                                mProgressDialog = new ProgressDialog(MainActivity.this);
-					        mProgressDialog.setMessage("Please Wait...Extracting zip file ... ");
-					        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-					        mProgressDialog.setCancelable(false);
-					        mProgressDialog.show();
-		                    unzip();
-		                } catch (IOException e) {
-		                    // TODO Auto-generated catch block
-		                    e.printStackTrace();
-		                }
-                    }
 				}
             		break;
 				case UNZIP_DISMISS_DIALOG:
 				{
 					mProgressDialog.dismiss();
 					File file = new File(mUnzipLocation + "/update/u-boot.bin");
+					mBtnUpdate.setEnabled(true);
 		            if (file.exists())
 		            	mCbUpdateUboot.setEnabled(true);
 				}
@@ -409,6 +405,16 @@ public class MainActivity extends Activity {
 			}
         	
         };
+    }
+    
+    public boolean isOnline() {
+        ConnectivityManager cm =
+            (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        if (netInfo != null && netInfo.isConnectedOrConnecting()) {
+            return true;
+        }
+        return false;
     }
     
     private void checkDownloadDialog() {
@@ -560,11 +566,10 @@ public class MainActivity extends Activity {
             return null;
         }
         
-        protected void onProgressUpdate(String... progress) {
-            Log.d(TAG, progress[0]);
+        protected void onProgressUpdate(Integer... progress) {
             Message msg = mHandler.obtainMessage();
             msg.arg1 = DIALOG_PROGRESS;
-            msg.arg2 = Integer.parseInt(progress[0]);
+            msg.arg2 = progress[0];
             mHandler.sendMessage(msg);
         }
 
@@ -587,13 +592,56 @@ public class MainActivity extends Activity {
     @Override
     protected void onResume() {
         // TODO Auto-generated method stub
-        super.onResume();        
-        
+        super.onResume();  
+
         try {
             mProcess = Runtime.getRuntime().exec("su");
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+        }       
+
+        if (!isOnline()) {
+            new AlertDialog.Builder(this)
+            .setTitle("Check connection")
+            .setMessage("Not found internet connection!")
+            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+               public void onClick(DialogInterface dialog, int which) { 
+                   finish();
+               }
+            })
+            .setIcon(android.R.drawable.ic_dialog_alert)
+            .show();
+        }
+      
+        String sdcardState = android.os.Environment.getExternalStorageState();
+        if (!sdcardState.contentEquals(android.os.Environment.MEDIA_MOUNTED)) {
+            new AlertDialog.Builder(this)
+            .setTitle("Check disk")
+            .setMessage("Not found internal storage mounted!")
+            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+               public void onClick(DialogInterface dialog, int which) { 
+                   finish();
+               }
+            })
+            .setIcon(android.R.drawable.ic_dialog_alert)
+            .show();
+        }
+        
+        StatFs stat = new StatFs(Environment.getExternalStorageDirectory().getPath());
+        double sdAvailSize = (double)stat.getAvailableBlocks()
+                           * (double)stat.getBlockSize();
+        if (sdAvailSize < 700000000) {
+            new AlertDialog.Builder(this)
+            .setTitle("Check free space")
+            .setMessage("Insufficient free space!\nAbout 700M free space is required")
+            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+               public void onClick(DialogInterface dialog, int which) { 
+                   finish();
+               }
+            })
+            .setIcon(android.R.drawable.ic_dialog_alert)
+            .show();
         }
     }
 
@@ -643,7 +691,6 @@ public class MainActivity extends Activity {
         }
 
         protected void onProgressUpdate(Integer... progress) {
-            //Log.d(TAG, progress[0]);
             Message msg = mHandler.obtainMessage();
             msg.arg1 = DIALOG_PROGRESS;
             msg.arg2 = progress[0];
@@ -660,6 +707,12 @@ public class MainActivity extends Activity {
     }
     
     public void unzip() throws IOException {
+        if (mProgressDialog == null)
+            mProgressDialog = new ProgressDialog(MainActivity.this);
+	    mProgressDialog.setMessage("Please Wait... Extracting zip file... ");
+	    mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+	    mProgressDialog.setCancelable(false);
+        mProgressDialog.show();
         new UnZipTask().execute(mZipFile, mUnzipLocation);
     }
     
@@ -722,7 +775,7 @@ public class MainActivity extends Activity {
 
             if (!dir.mkdirs()) {
                 throw new RuntimeException("Can not create dir " + dir);
-                }
+            }
         }
     }
 

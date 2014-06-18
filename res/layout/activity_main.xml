@@ -16,61 +16,50 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="52dp"
-        android:ems="10" >
+        android:layout_marginTop="30dp"
+        android:ems="10"
+        android:inputType="text" >
+
     </EditText>
 
     <TextView
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/et_url"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="10dp"
         android:text="@string/from" />
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/cb_userdata_format"
         android:layout_below="@+id/btn_Validate"
-        android:layout_marginTop="18dp"
+        android:layout_marginTop="10dp"
         android:text="@string/md5sum" />
 
     <Button
         android:id="@+id/btn_Update"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/cb_userdata_format"
         android:layout_below="@+id/cb_userdata_format"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="10dp"
         android:text="@string/update" />
-
-    <CheckBox
-        android:id="@+id/cb_userdata_format"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/btn_Validate"
-        android:layout_below="@+id/textView2"
-        android:layout_marginTop="18dp"
-        android:text="@string/format_userdata" />
 
     <TextView
         android:id="@+id/tv_md5sum_result"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/cb_userdata_format"
+        android:layout_alignBaseline="@id/textView2"
+        android:layout_marginLeft="5dp"
         android:layout_toRightOf="@+id/textView2" />
 
     <Button
         android:id="@+id/btn_Validate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/tv_md5sum"
         android:layout_below="@+id/tv_md5sum"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="10dp"
         android:text="@string/validate_file" />
 
     <CheckBox
@@ -79,6 +68,7 @@
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/cb_userdata_format"
         android:layout_alignBottom="@+id/cb_userdata_format"
+        android:layout_marginLeft="20dp"
         android:layout_toRightOf="@+id/cb_userdata_format"
         android:text="@string/format_fat" />
 
@@ -88,6 +78,7 @@
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/cb_fat_format"
         android:layout_alignBottom="@+id/cb_fat_format"
+        android:layout_marginLeft="20dp"
         android:layout_toRightOf="@+id/cb_fat_format"
         android:text="@string/clear_uboot_env" />
 
@@ -97,6 +88,7 @@
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/cb_clear_uboot_env"
         android:layout_alignBottom="@+id/cb_clear_uboot_env"
+        android:layout_marginLeft="20dp"
         android:layout_toRightOf="@+id/cb_clear_uboot_env"
         android:text="@string/update_uboot" />
 
@@ -106,16 +98,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/et_url"
+        android:layout_marginTop="10dp"
         android:text="@string/get_last_version" />
-
-    <Button
-        android:id="@+id/btn_Download"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/btn_get_last_version"
-        android:layout_alignBottom="@+id/btn_get_last_version"
-        android:layout_toRightOf="@+id/btn_Update"
-        android:text="@string/download" />
 
     <TextView
         android:id="@+id/tv_check_last"
@@ -129,8 +113,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/btn_get_last_version"
-        android:layout_below="@+id/tv_check_last"
-        android:layout_marginTop="16dp"
+        android:layout_below="@+id/btn_get_last_version"
+        android:layout_marginTop="10dp"
         android:text="@string/n_a" />
 
     <Button
@@ -138,7 +122,34 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/btn_Update"
+        android:layout_marginLeft="20dp"
         android:layout_toRightOf="@id/btn_Update"
         android:text="@string/write_kernel" />
+
+    <Button
+        android:id="@+id/btn_Download"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/btn_get_last_version"
+        android:layout_marginLeft="20dp"
+        android:layout_toRightOf="@+id/btn_get_last_version"
+        android:text="@string/download" />
+
+    <Button
+        android:id="@+id/btn_extract"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView2"
+        android:layout_marginTop="10dp"
+        android:text="@string/extract" />
+
+    <CheckBox
+        android:id="@+id/cb_userdata_format"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btn_extract"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="10dp"
+        android:text="@string/format_userdata" />
 
 </RelativeLayout>

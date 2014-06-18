@@ -13,7 +13,8 @@
     <string name="format_fat">Format FAT</string>
     <string name="clear_uboot_env">Clear uboot env</string>
     <string name="update_uboot">Update uboot</string>
-    <string name="get_last_version">Get last Version.</string>
+    <string name="get_last_version">Get the latest version.</string>
     <string name="write_kernel">Write zImage(dd)</string>
+    <string name="extract">Extract</string>
 
 </resources>
