@@ -122,8 +122,7 @@ public class MainActivity extends Activity {
                 mBtnUpdate.setEnabled(false);
                 mBtnWriteKernel.setEnabled(false);
 
-  				if (mProgressDialog == null)
-					mProgressDialog = new ProgressDialog(MainActivity.this);
+				mProgressDialog = new ProgressDialog(MainActivity.this);
 	            mProgressDialog.setMessage("Downloading Zip File..");
 	            mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 	            mProgressDialog.setCancelable(false);
@@ -140,8 +139,7 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
                 // TODO Auto-generated method stub  				
                 
-                if (mProgressDialog == null)
-					mProgressDialog = new ProgressDialog(MainActivity.this);
+				mProgressDialog = new ProgressDialog(MainActivity.this);
 	            mProgressDialog.setMessage("Downloading Version File..");
 	            mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 	            mProgressDialog.setCancelable(false);
@@ -566,12 +564,14 @@ public class MainActivity extends Activity {
             return null;
         }
         
+        /*
         protected void onProgressUpdate(Integer... progress) {
-            Message msg = mHandler.obtainMessage();
-            msg.arg1 = DIALOG_PROGRESS;
-            msg.arg2 = progress[0];
-            mHandler.sendMessage(msg);
+            //Message msg = mHandler.obtainMessage();
+            //msg.arg1 = DIALOG_PROGRESS;
+            //msg.arg2 = progress[0];
+            //mHandler.sendMessage(msg);
         }
+        */
 
         @Override
         protected void onPostExecute(String unused) {
@@ -580,8 +580,7 @@ public class MainActivity extends Activity {
     }
 
     private void checkValidate() {
-    	if (mProgressDialog == null)
-			mProgressDialog = new ProgressDialog(MainActivity.this);
+		mProgressDialog = new ProgressDialog(MainActivity.this);
         mProgressDialog.setMessage("Please Wait... Calculate checksum... ");
         mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         mProgressDialog.setCancelable(false);
@@ -707,8 +706,7 @@ public class MainActivity extends Activity {
     }
     
     public void unzip() throws IOException {
-        if (mProgressDialog == null)
-            mProgressDialog = new ProgressDialog(MainActivity.this);
+        mProgressDialog = new ProgressDialog(MainActivity.this);
 	    mProgressDialog.setMessage("Please Wait... Extracting zip file... ");
 	    mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 	    mProgressDialog.setCancelable(false);
