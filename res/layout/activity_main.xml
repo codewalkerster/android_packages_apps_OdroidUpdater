@@ -105,7 +105,7 @@
         android:id="@+id/tv_check_last"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/tv_md5sum"
+        android:layout_alignLeft="@+id/btn_get_last_version"
         android:layout_below="@+id/btn_get_last_version" />
 
     <TextView
@@ -113,7 +113,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/btn_get_last_version"
-        android:layout_below="@+id/btn_get_last_version"
+        android:layout_below="@id/tv_check_last"
         android:layout_marginTop="10dp"
         android:text="@string/n_a" />
 
