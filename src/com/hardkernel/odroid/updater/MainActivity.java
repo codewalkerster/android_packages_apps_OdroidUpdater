@@ -718,6 +718,18 @@ public class MainActivity extends Activity {
         @SuppressWarnings("rawtypes")
         @Override
         protected Boolean doInBackground(String... params) {
+            File update_folder = new File(mUnzipLocation + "update");
+            if (update_folder.exists()) {
+                String[] myFiles;      
+
+                myFiles = update_folder.list();  
+                for (int i = 0; i < myFiles.length; i++) {  
+                    File myFile = new File(update_folder, myFiles[i]);   
+                    myFile.delete();  
+                }
+            }
+
+            
             String filePath = params[0];
             String destinationPath = params[1];
             File archive = new File(filePath);
