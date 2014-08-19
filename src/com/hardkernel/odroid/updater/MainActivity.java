@@ -71,7 +71,7 @@ public class MainActivity extends Activity {
     private String mVersionURL = "http://dn.odroid.com/";
     private String mProductName;
     private static final String DOWNLOAD_SITE = "http://dn.odroid.com/[product]/update.zip";
-    private static final String INFORM_NODE = "/sys/devices/platform/odroid-sysfs/inform0";
+    private static final String INFORM_NODE = "/sys/bus/platform/drivers/odroid-sysfs/odroid_sysfs.16/inform0";
     
     private Handler mHandler;
     
@@ -90,8 +90,11 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         
         mProductName = getProductName();
+
         if (mProductName.equals("ODROID-XU/"))
             mVersionURL += "ODROID-XU/version";
+        else if (mProductName.equals("ODROID-XU3/"))
+            mVersionURL += "5422/ODROID-XU3/Android/version";
         else
             mVersionURL += "4412/Android/version";
         
@@ -366,16 +369,17 @@ public class MainActivity extends Activity {
 	                        }
 
 	                        mEt_URL.setText(url);
+
+                            if (checkLastUpdate(mUpdateDate)) {
+                                mTv_CheckLast.setText("Updated Last Version");
+                                checkDownloadDialog();
+                            }
+                            mBtnDownload.setEnabled(true);
 	                    }
 	                } catch (IOException e) {
 	                    // TODO Auto-generated catch block
 	                    e.printStackTrace();
 	                }
-	                if (checkLastUpdate(mUpdateDate)) {
-	                    mTv_CheckLast.setText("Updated Last Version");
-	                    checkDownloadDialog();
-	                }
-	                mBtnDownload.setEnabled(true);
 				}
 				    break;
 				case MD5SUM_DISMISS_DIALOG:
@@ -480,7 +484,7 @@ public class MainActivity extends Activity {
             while ((line = bufferedReader.readLine()) != null) {
                 if (line.contains("ro.build.product")) {
                     Log.e(TAG, line);
-                    product_name = line.substring(21, line.length() -1);
+                    product_name = line.substring(line.indexOf("odroid"), line.length() - 1);
                     Log.e(TAG, product_name);
                 }
             }
@@ -502,6 +506,8 @@ public class MainActivity extends Activity {
             model = "ODROID-Q/";
         else if (product_name.equals("odroidxu"))
             model = "ODROID-XU/";
+        else if (product_name.equals("odroidxu3"))
+            model = "ODROID-XU3/";
         
         return model;
     }
