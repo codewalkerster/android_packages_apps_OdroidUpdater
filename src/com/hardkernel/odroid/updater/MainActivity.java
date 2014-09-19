@@ -612,7 +612,7 @@ public class MainActivity extends Activity {
             .setMessage("Not found internet connection!")
             .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                public void onClick(DialogInterface dialog, int which) { 
-                   finish();
+                   //finish();
                }
             })
             .setIcon(android.R.drawable.ic_dialog_alert)
