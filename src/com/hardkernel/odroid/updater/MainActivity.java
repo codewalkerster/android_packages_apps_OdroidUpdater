@@ -820,13 +820,16 @@ public class MainActivity extends Activity {
                     }
 
                     FileOutputStream fout = new FileOutputStream(ToPath + filename);
+                    BufferedOutputStream bufout = new BufferedOutputStream(fout);
+                    count = 0;
 
                     // cteni zipu a zapis
                     while ((count = zis.read(buffer)) != -1) {
-                        fout.write(buffer, 0, count);             
+                       bufout.write(buffer, 0, count);
                     }
 
-                    fout.close();               
+                    bufout.close();
+                    fout.close();
                     zis.closeEntry();
                 }
 
