@@ -118,15 +118,6 @@
         android:text="@string/n_a" />
 
     <Button
-        android:id="@+id/btn_dd"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/btn_Update"
-        android:layout_marginLeft="20dp"
-        android:layout_toRightOf="@id/btn_Update"
-        android:text="@string/write_kernel" />
-
-    <Button
         android:id="@+id/btn_Download"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
