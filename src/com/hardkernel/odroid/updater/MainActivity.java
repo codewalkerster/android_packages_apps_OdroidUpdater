@@ -70,7 +70,7 @@ public class MainActivity extends Activity {
     private String mVersionURL = "http://dn.odroid.com/";
     private String mProductName;
     private static final String DOWNLOAD_SITE = "http://dn.odroid.com/[product]/update.zip";
-    private static final String INFORM_NODE = "/sys/bus/platform/drivers/odroid-sysfs/odroid_sysfs.16/inform0";
+    private static final String INFORM_NODE = "/sys/bus/platform/drivers/odroid-sysfs/odroid_sysfs.15/inform0";
 
     private Handler mHandler;
 
