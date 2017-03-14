@@ -70,7 +70,7 @@ public class MainActivity extends Activity {
     private String mVersionURL = "http://dn.odroid.com/";
     private String mProductName;
     private static final String DOWNLOAD_SITE = "http://dn.odroid.com/[product]/update.zip";
-    private static final String INFORM_NODE = "/sys/bus/platform/drivers/odroid-sysfs/odroid_sysfs.15/inform0";
+    private static String INFORM_NODE = "/sys/bus/platform/drivers/odroid-sysfs/odroid_sysfs.";
 
     private Handler mHandler;
 
@@ -201,47 +201,53 @@ public class MainActivity extends Activity {
                 CheckBox cb_clear_uboot = (CheckBox)findViewById(R.id.cb_clear_uboot_env);
                 CheckBox cb_update_uboot = (CheckBox)findViewById(R.id.cb_update_uboot);
                 FileOutputStream fos;
-                try {
-                    fos = new FileOutputStream(INFORM_NODE);
-                    int value = 0;
-                    if (cb_userdata_format.isChecked())
-                        value |= 1;
-                    if (cb_fat_format.isChecked())
-                        value |= 2;
-                    if (cb_clear_uboot.isChecked())
-                        value |= 4;
-                    if (cb_update_uboot.isChecked())
-                        value |= 8;
+                int i = 0;
+                while (i < 100) {
+                    String inform_node = INFORM_NODE + i + "/inform0";
+                    i++;
+                    try {
+                        fos = new FileOutputStream(inform_node);
+                        int value = 0;
+                        if (cb_userdata_format.isChecked())
+                            value |= 1;
+                        if (cb_fat_format.isChecked())
+                            value |= 2;
+                        if (cb_clear_uboot.isChecked())
+                            value |= 4;
+                        if (cb_update_uboot.isChecked())
+                            value |= 8;
 
-                    byte[] bytes = new byte[4];
-                    bytes[0] = '0';
-                    bytes[1] = 'x';
+                        byte[] bytes = new byte[4];
+                        bytes[0] = '0';
+                        bytes[1] = 'x';
 
-                    if (value == 0xa)
-                        bytes[2] = 'a';
-                    else if(value == 0xb)
-                        bytes[2] = 'b';
-                    else if (value == 0xc)
-                        bytes[2] = 'c';
-                    else if (value == 0xd)
-                        bytes[2] = 'd';
-                    else if (value == 0xe)
-                        bytes[2] = 'e';
-                    else if (value == 0xf)
-                        bytes[2] = 'f';
-                    else
-                        bytes[2] = (byte)('0' + value);
-                    bytes[3] = '\n';
-                    fos.write(bytes);
-                    fos.close();
-                } catch (FileNotFoundException e1) {
-                    // TODO Auto-generated catch block
-                    e1.printStackTrace();
-                    return;
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                    return;
+                        if (value == 0xa)
+                            bytes[2] = 'a';
+                        else if(value == 0xb)
+                            bytes[2] = 'b';
+                        else if (value == 0xc)
+                            bytes[2] = 'c';
+                        else if (value == 0xd)
+                            bytes[2] = 'd';
+                        else if (value == 0xe)
+                            bytes[2] = 'e';
+                        else if (value == 0xf)
+                            bytes[2] = 'f';
+                        else
+                            bytes[2] = (byte)('0' + value);
+                        bytes[3] = '\n';
+                        fos.write(bytes);
+                        fos.close();
+                        break;
+                    } catch (FileNotFoundException e1) {
+                        // TODO Auto-generated catch block
+                        e1.printStackTrace();
+                        continue;
+                    } catch (IOException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                        continue;
+                    }
                 }
 
                 try {
