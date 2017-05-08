@@ -67,9 +67,9 @@ public class MainActivity extends Activity {
     private TextView mTv_MD5SUM;
     private CheckBox mCbUpdateUboot;
 
-    private String mVersionURL = "http://dn.odroid.com/";
+    private String mVersionURL = "https://dn.odroid.com/";
     private String mProductName;
-    private static final String DOWNLOAD_SITE = "http://dn.odroid.com/[product]/update.zip";
+    private static final String DOWNLOAD_SITE = "https://dn.odroid.com/[product]/update.zip";
     private static String INFORM_NODE = "/sys/bus/platform/drivers/odroid-sysfs/odroid_sysfs.";
 
     private Handler mHandler;
