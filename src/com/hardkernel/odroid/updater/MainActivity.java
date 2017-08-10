@@ -47,8 +47,8 @@ public class MainActivity extends Activity {
 
     private ProgressDialog mProgressDialog = null;
     private Process mProcess;
-    private String mUnzipLocation = Environment.getExternalStorageDirectory() + "/";
-    private String mZipFile = Environment.getExternalStorageDirectory() + "/update.zip";
+    private String mUnzipLocation = "/mnt/sdcard/";
+    private String mZipFile = "/mnt/sdcard/update.zip";
     private String mZipFileMd5sum = mZipFile + ".md5sum";
     private String mUpdateDate;
 
@@ -204,6 +204,9 @@ public class MainActivity extends Activity {
                 int i = 0;
                 while (i < 100) {
                     String inform_node = INFORM_NODE + i + "/inform0";
+                    String inform_node5 = INFORM_NODE + i + "/inform5";
+                    String inform_node6 = INFORM_NODE + i + "/inform6";
+                    String inform_node7 = INFORM_NODE + i + "/inform7";
                     i++;
                     try {
                         fos = new FileOutputStream(inform_node);
@@ -237,6 +240,33 @@ public class MainActivity extends Activity {
                             bytes[2] = (byte)('0' + value);
                         bytes[3] = '\n';
                         fos.write(bytes);
+
+                        //fdisk -c 1024 0 256 100 : system userdata cache vfat
+                        fos = new FileOutputStream(inform_node5);
+                        //system partition : 1024MByte
+                        value = 1024 << 16;
+                        //cache partition : 256MByte
+                        value |= 256;
+                        String hex = "0x" + Integer.toHexString(value);
+                        byte[] buf = hex.getBytes();
+                        fos.write(buf);
+
+                        fos = new FileOutputStream(inform_node6);
+                        hex = "";
+                        //userdata : all the rest
+                        value = 0;
+                        hex = "0x" + Integer.toHexString(value);
+                        buf = hex.getBytes();
+                        fos.write(buf);
+
+                        fos = new FileOutputStream(inform_node7);
+                        hex = "";
+                        //vfat : 100MByte
+                        value = 100;
+                        hex = "0x" + Integer.toHexString(value);
+                        buf = hex.getBytes();
+                        fos.write(buf);
+
                         fos.close();
                         break;
                     } catch (FileNotFoundException e1) {
