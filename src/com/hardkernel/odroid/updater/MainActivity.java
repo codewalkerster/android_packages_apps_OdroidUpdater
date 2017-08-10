@@ -83,6 +83,15 @@ public class MainActivity extends Activity {
     private String mDownloadResult;
     private boolean mMd5sumResult;
 
+    /* Self update option */
+    private static final int OPTION_ERASE_USERDATA = 0x01;
+    private static final int OPTION_ERASE_FAT = 0x02;
+    private static final int OPTION_ERASE_ENV = 0x04;
+    private static final int OPTION_UPDATE_UBOOT = 0x08;
+    private static final int OPTION_RESIZE_PART = 0x10;
+    private static final int OPTION_FILELOAD_EXT4 = 0x20;
+    private static final int OPTION_OLDTYPE_PART = 0x40;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -212,34 +221,19 @@ public class MainActivity extends Activity {
                         fos = new FileOutputStream(inform_node);
                         int value = 0;
                         if (cb_userdata_format.isChecked())
-                            value |= 1;
+                            value |= OPTION_ERASE_USERDATA;
                         if (cb_fat_format.isChecked())
-                            value |= 2;
+                            value |= OPTION_ERASE_FAT;
                         if (cb_clear_uboot.isChecked())
-                            value |= 4;
+                            value |= OPTION_ERASE_ENV;
                         if (cb_update_uboot.isChecked())
-                            value |= 8;
+                            value |= OPTION_UPDATE_UBOOT;
 
-                        byte[] bytes = new byte[4];
-                        bytes[0] = '0';
-                        bytes[1] = 'x';
+                        value |= OPTION_FILELOAD_EXT4;
 
-                        if (value == 0xa)
-                            bytes[2] = 'a';
-                        else if(value == 0xb)
-                            bytes[2] = 'b';
-                        else if (value == 0xc)
-                            bytes[2] = 'c';
-                        else if (value == 0xd)
-                            bytes[2] = 'd';
-                        else if (value == 0xe)
-                            bytes[2] = 'e';
-                        else if (value == 0xf)
-                            bytes[2] = 'f';
-                        else
-                            bytes[2] = (byte)('0' + value);
-                        bytes[3] = '\n';
-                        fos.write(bytes);
+                        String hex = "0x" + Integer.toHexString(value);
+                        byte[] buf = hex.getBytes();
+                        fos.write(buf);
 
                         //fdisk -c 1024 0 256 100 : system userdata cache vfat
                         fos = new FileOutputStream(inform_node5);
@@ -247,8 +241,8 @@ public class MainActivity extends Activity {
                         value = 1024 << 16;
                         //cache partition : 256MByte
                         value |= 256;
-                        String hex = "0x" + Integer.toHexString(value);
-                        byte[] buf = hex.getBytes();
+                        hex = "0x" + Integer.toHexString(value);
+                        buf = hex.getBytes();
                         fos.write(buf);
 
                         fos = new FileOutputStream(inform_node6);

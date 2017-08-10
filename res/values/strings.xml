@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">ODROID Updater V2.4</string>
+    <string name="app_name">ODROID Updater V3.0 for MTP</string>
     <string name="action_settings">Settings</string>
     <string name="download">Download</string>
     <string name="from">from</string>
