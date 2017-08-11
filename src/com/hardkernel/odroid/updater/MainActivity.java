@@ -16,6 +16,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.security.MessageDigest;
 import java.util.Enumeration;
+import java.util.StringTokenizer;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
@@ -47,8 +48,8 @@ public class MainActivity extends Activity {
 
     private ProgressDialog mProgressDialog = null;
     private Process mProcess;
-    private String mUnzipLocation = "/mnt/sdcard/";
-    private String mZipFile = "/mnt/sdcard/update.zip";
+    private String mUnzipLocation = Environment.getExternalStorageDirectory() + "/";
+    private String mZipFile = mUnzipLocation + "/update.zip";
     private String mZipFileMd5sum = mZipFile + ".md5sum";
     private String mUpdateDate;
 
@@ -68,7 +69,7 @@ public class MainActivity extends Activity {
     private CheckBox mCbUpdateUboot;
 
     private String mVersionURL = "https://dn.odroid.com/";
-    private String mProductName;
+    private String mProductName = "ODROID-XU4";
     private static final String DOWNLOAD_SITE = "https://dn.odroid.com/[product]/update.zip";
     private static String INFORM_NODE = "/sys/bus/platform/drivers/odroid-sysfs/odroid_sysfs.";
 
@@ -97,14 +98,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mProductName = getProductName();
-
-        if (mProductName.equals("ODROID-XU/"))
-            mVersionURL += "ODROID-XU/version";
-        else if (mProductName.equals("ODROID-XU3/"))
-            mVersionURL += "5422/ODROID-XU3/Android/version";
-        else
-            mVersionURL += "4412/Android/version";
+        mVersionURL += "5422/ODROID-XU4/Android/version";
 
         mEt_URL = (EditText)this.findViewById(R.id.et_url);
         mEt_URL.setText(DOWNLOAD_SITE);
@@ -358,6 +352,7 @@ public class MainActivity extends Activity {
                             BufferedReader reader =
                                 new BufferedReader(new FileReader(version_path));
                             mUpdateDate = reader.readLine();
+                            Log.e(TAG, "mUpdateDate = " + mUpdateDate);
                             String url;
                             do {
                                 url = reader.readLine();
@@ -373,9 +368,15 @@ public class MainActivity extends Activity {
 
                             mEt_URL.setText(url);
 
-                            if (checkLastUpdate(mUpdateDate)) {
+                            int result = checkLastUpdate(mUpdateDate);
+                            if (result == 0) {
                                 mTv_CheckLast.setText("Updated Last Version");
                                 checkDownloadDialog();
+                            } else if (result < 0) {
+                                Toast.makeText(
+                                        getBaseContext(), "This version is no longer supported.",
+                                        Toast.LENGTH_SHORT).show();
+                                return;
                             }
                             mBtnDownload.setEnabled(true);
                         }
@@ -471,11 +472,10 @@ public class MainActivity extends Activity {
         return sb.toString();
     }
 
-    private String getProductName() {
-        String product_name = "odroid";
+    public int checkLastUpdate(String date) {
         InputStream inputstream = null;
         try {
-            inputstream = Runtime.getRuntime().exec("getprop")
+            inputstream = Runtime.getRuntime().exec("getprop ro.build.version.incremental")
                     .getInputStream();
         } catch (IOException e) {
             e.printStackTrace();
@@ -483,67 +483,30 @@ public class MainActivity extends Activity {
         BufferedReader bufferedReader = new BufferedReader(
                   new InputStreamReader(inputstream));
 
-        String line;
         try {
-            while ((line = bufferedReader.readLine()) != null) {
-                if (line.contains("ro.build.product")) {
-                    Log.e(TAG, line);
-                    product_name =
-                        line.substring(line.indexOf("odroid"), line.length() - 1);
-                    Log.e(TAG, product_name);
-                }
-            }
+            String line = bufferedReader.readLine();
+            Log.e(TAG, "ro.build.version.incremental = " + line);
+
             bufferedReader.close();
+
+            StringTokenizer tokens = new StringTokenizer(line, ".");
+            String system_date = tokens.nextToken();
+            system_date = tokens.nextToken();
+            system_date = tokens.nextToken();
+            //It is impossible to update.
+            if (Integer.parseInt(system_date) <= 20170727)
+                return -1;
+
+            if (Integer.parseInt(system_date) == Integer.parseInt(date))
+                return 0;
+
         } catch (IOException e1) {
             // TODO Auto-generated catch block
             e1.printStackTrace();
+            return -1;
         }
 
-        String model = "ODROID-U";
-
-        if (product_name.equals("odroidx2"))
-            model = "ODROID-X2/";
-        else if (product_name.equals("odroidx"))
-            model = "ODROID-X/";
-        else if (product_name.equals("odroidq2"))
-            model = "ODROID-Q2/";
-        else if (product_name.equals("odroidq"))
-            model = "ODROID-Q/";
-        else if (product_name.equals("odroidxu"))
-            model = "ODROID-XU/";
-        else if (product_name.equals("odroidxu3"))
-            model = "ODROID-XU3/";
-
-        return model;
-    }
-
-    public boolean checkLastUpdate(String date) {
-        InputStream inputstream = null;
-        try {
-            inputstream = Runtime.getRuntime().exec("getprop")
-                    .getInputStream();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        BufferedReader bufferedReader = new BufferedReader(
-                  new InputStreamReader(inputstream));
-
-        String line;
-        try {
-            while ((line = bufferedReader.readLine()) != null) {
-                Log.e(TAG, line);
-                if (line.contains(date)) {
-                    return true;
-                }
-            }
-            bufferedReader.close();
-        } catch (IOException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-            return false;
-        }
-        
-        return false;
+        return 1;
     }
 
     class CheckValidateAsync extends AsyncTask<String, String, String> {
