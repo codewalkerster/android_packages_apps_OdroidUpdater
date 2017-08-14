@@ -229,6 +229,8 @@ public class MainActivity extends Activity {
                         byte[] buf = hex.getBytes();
                         fos.write(buf);
 
+/*
+                        // value |= OPTION_RESIZE_PART
                         //fdisk -c 1024 0 256 100 : system userdata cache vfat
                         fos = new FileOutputStream(inform_node5);
                         //system partition : 1024MByte
@@ -254,6 +256,7 @@ public class MainActivity extends Activity {
                         hex = "0x" + Integer.toHexString(value);
                         buf = hex.getBytes();
                         fos.write(buf);
+*/
 
                         fos.close();
                         break;
