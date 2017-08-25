@@ -168,6 +168,7 @@ public class MainActivity extends Activity {
                     File file = new File(mUnzipLocation + "/update/u-boot.bin");
                     if (file.exists())
                         mCbUpdateUboot.setEnabled(true);
+                        mCbUpdateUboot.setChecked(true);
                 }
 
         });
@@ -407,6 +408,7 @@ public class MainActivity extends Activity {
                     mBtnUpdate.setEnabled(true);
                     if (file.exists())
                         mCbUpdateUboot.setEnabled(true);
+                        mCbUpdateUboot.setChecked(true);
                 }
                     break;
                 }
